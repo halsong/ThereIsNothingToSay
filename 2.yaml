@@ -102,24 +102,7 @@ entries:
     name: hidream-i1-dev
   spec:
     deployments:
-    - customRuntimeArgs:
-      - --steps-scale=2.8
-      - --logging-level=DEBUG
-      - --disbale-duplicate-scheduler=True
-      - --custom-load-pipe-script
-      - "import torch\nfrom transformers import PreTrainedTokenizerFast, LlamaForCausalLM,\
-        \ AutoModel\nfrom diffusers import (\n    UniPCMultistepScheduler,\n    HiDreamImagePipeline,\n\
-        \    HiDreamImageTransformer2DModel,\n)\n\nscheduler = UniPCMultistepScheduler(\n\
-        \    flow_shift=3.0,\n    prediction_type=\"flow_prediction\",\n    use_flow_sigmas=True,\n\
-        )\n\ntokenizer_4 = PreTrainedTokenizerFast.from_pretrained(\n    args.model,\n\
-        \    subfolder='llama-3.1-8b-hf',\n)\n\ntext_encoder_4 = AutoModel.from_pretrained(\n\
-        \    args.model,\n    subfolder='llama-3.1-8b-hf',\n    output_hidden_states=True,\n\
-        \    output_attentions=True,\n    torch_dtype=torch.bfloat16,\n).to(args.device)\n\
-        \ntransformer = HiDreamImageTransformer2DModel.from_pretrained(\n    args.model,\
-        \ subfolder=\"transformer\", torch_dtype=torch.bfloat16\n).to(args.device)\n\
-        \npipe = HiDreamImagePipeline.from_pretrained(\n    args.model,\n    scheduler=scheduler,\n\
-        \    tokenizer_4=tokenizer_4,\n    text_encoder_4=text_encoder_4,\n    transformer=transformer,\n\
-        \    torch_dtype=torch.bfloat16,\n).to(args.device)"
+    - customRuntimeArgs: []
       resourceRequirements:
         cpu: 8
         gpuCount: 1
