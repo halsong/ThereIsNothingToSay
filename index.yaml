@@ -1,0 +1,949 @@
+apiVersion: v1
+entries:
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: baichuan2-13b-chat
+  spec:
+    config:
+      maxTokens: 4096
+    deployments:
+    - customRuntimeArgs:
+      - --chat-template
+      - "{{ (messages|selectattr(\"role\", \"equalto\", \"system\")|list|last).content|trim\
+        \ if (messages|selectattr(\"role\", \"equalto\", \"system\")|list) else \"\
+        \" }}\n\n{%- for message in messages -%}\n    {%- if message[\"role\"] ==\
+        \ \"user\" -%}\n        {{- \"<reserved_106>\" + message[\"content\"] -}}\n\
+        \    {%- elif message[\"role\"] == \"assistant\" -%}\n        {{- \"<reserved_107>\"\
+        \ + message[\"content\"] -}}\n    {%- endif -%}\n{%- endfor -%}\n\n{%- if\
+        \ add_generation_prompt and messages[-1][\"role\"] != \"assistant\" -%}\n\
+        \    {{- \"<reserved_107>\" -}}\n{% endif %}"
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 13B parameter chat model from the Baichuan2 series, focused on Chinese
+          dialogue generation with strong language understanding capabilities.
+        zhCN: "Baichuan2 \u7CFB\u5217\u7684 13B \u53C2\u6570\u804A\u5929\u6A21\u578B\
+          \uFF0C\u4E13\u6CE8\u4E8E\u4E2D\u6587\u5BF9\u8BDD\u751F\u6210\uFF0C\u5177\
+          \u5907\u5F3A\u5927\u7684\u8BED\u8A00\u7406\u89E3\u80FD\u529B\u3002"
+      display: baichuan2-13b-Chat
+      icon:
+        src: https://public-resources.d.run/models/logos/baichuan-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/baichuan-inc
+      provider:
+        id: baichuanai
+        name:
+          enUS: BaichuanAI
+          zhCN: "\u767E\u5DDD\u667A\u80FD"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: baichuan-inc/Baichuan2-13B-Chat
+      modelscope:
+        name: baichuan-inc/Baichuan2-13B-Chat
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: deepseek-r1
+  spec:
+    config:
+      maxTokens: 16384
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 12
+        gpuType: gpu
+        memory: 960
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: DeepSeek-R1 is an inference model developed by DeepSeek, which uses
+          reinforcement learning for post-training, aiming to enhance its inference
+          capabilities, especially in complex tasks such as mathematics, coding, and
+          natural language reasoning.
+        zhCN: "DeepSeek-R1\uFF0C\u662F\u5E7B\u65B9\u91CF\u5316\u65D7\u4E0BAI\u516C\
+          \u53F8\u6DF1\u5EA6\u6C42\u7D22\uFF08DeepSeek\uFF09\u7814\u53D1\u7684\u63A8\
+          \u7406\u6A21\u578B\u3002DeepSeek-R1\u91C7\u7528\u5F3A\u5316\u5B66\u4E60\u8FDB\
+          \u884C\u540E\u8BAD\u7EC3\uFF0C\u65E8\u5728\u63D0\u5347\u63A8\u7406\u80FD\
+          \u529B\uFF0C\u5C24\u5176\u64C5\u957F\u6570\u5B66\u3001\u4EE3\u7801\u548C\
+          \u81EA\u7136\u8BED\u8A00\u63A8\u7406\u7B49\u590D\u6742\u4EFB\u52A1\u3002"
+      display: DeepSeek-R1-0528
+      icon:
+        src: https://public-resources.d.run/models/logos/deepseek-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.deepseek.com/
+      provider:
+        id: deepseek
+        name:
+          enUS: DeepSeek
+          zhCN: "\u6DF1\u5EA6\u6C42\u7D22"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: deepseek-ai/DeepSeek-R1
+      modelscope:
+        name: deepseek-ai/DeepSeek-R1
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: deepseek-r1-distill-qwen-1.5b
+  spec:
+    config:
+      maxTokens: 16384
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 6
+      runtime: vllm
+      versionRequired: '>=v0.7.1'
+    descriptor:
+      description:
+        enUS: A distilled model from the DeepSeek series, optimized for efficient
+          inference and performance.
+        zhCN: "DeepSeek \u7CFB\u5217\u7684\u84B8\u998F\u6A21\u578B\uFF0C\u4F18\u5316\
+          \u4E86\u63A8\u7406\u6548\u7387\u548C\u6027\u80FD\u3002"
+      display: Deepseek-R1-Distill-Qwen-1.5B
+      icon:
+        src: https://public-resources.d.run/models/logos/deepseek-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.deepseek.com/
+      provider:
+        id: deepseek
+        name:
+          enUS: DeepSeek
+          zhCN: "\u6DF1\u5EA6\u6C42\u7D22"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+      modelscope:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: deepseek-r1-distill-qwen-14b
+  spec:
+    config:
+      maxTokens: 16384
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=32768
+      - --enforce-eager
+      - --enable_reasoning
+      - --reasoning_parser=deepseek_r1
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.7.1'
+    descriptor:
+      description:
+        enUS: A Qwen-14B distilled model from the DeepSeek series, optimized for efficient
+          inference and performance.
+        zhCN: "DeepSeek \u7CFB\u5217\u57FA\u4E8EQwen-14B\u7684\u84B8\u998F\u6A21\u578B"
+      display: Deepseek-R1-Distill-Qwen-14B
+      icon:
+        src: https://public-resources.d.run/models/logos/deepseek-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.deepseek.com/
+      provider:
+        id: deepseek
+        name:
+          enUS: DeepSeek
+          zhCN: "\u6DF1\u5EA6\u6C42\u7D22"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+      modelscope:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: deepseek-r1-distill-qwen-32b
+  spec:
+    config:
+      maxTokens: 16384
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=32768
+      - --enforce-eager
+      - --enable_reasoning
+      - --reasoning_parser=deepseek_r1
+      - --gpu-memory-utilization=1
+      env:
+      - name: VLLM_USE_V1
+        value: '0'
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 64
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.7.1'
+    descriptor:
+      description:
+        enUS: DeepSeek-R1-Distill-Qwen-32B is an optimized version based on Qwen-32B,
+          leveraging knowledge distillation techniques to enhance its performance
+          while maintaining a lightweight structure.
+        zhCN: "DeepSeek-R1-Distill-Qwen-32B \u662F\u4E00\u4E2A\u57FA\u4E8E Qwen-32B\
+          \ \u7684\u4F18\u5316\u7248\u672C\uFF0C\u901A\u8FC7\u57FA\u4E8EDeepSeek-R1\u7684\
+          \u77E5\u8BC6\u84B8\u998F\u6280\u672F\u5BF9\u6A21\u578B\u8FDB\u884C\u4E86\
+          \u4F18\u5316\uFF0C\u4F7F\u5176\u5728\u4FDD\u6301\u9AD8\u6548\u6027\u80FD\
+          \u7684\u540C\u65F6\uFF0C\u5177\u5907\u66F4\u8F7B\u91CF\u5316\u7684\u7ED3\
+          \u6784\u3002\u5B83\u5728\u591A\u79CD\u81EA\u7136\u8BED\u8A00\u5904\u7406\
+          \u4EFB\u52A1\u4E2D\u8868\u73B0\u51FA\u8272\uFF0C\u5C24\u5176\u64C5\u957F\
+          \u6587\u672C\u751F\u6210\u3001\u5BF9\u8BDD\u7406\u89E3\u548C\u591A\u8BED\
+          \u8A00\u7FFB\u8BD1\u7B49\u4EFB\u52A1\u3002\u8BE5\u6A21\u578B\u7ECF\u8FC7\
+          \u5927\u89C4\u6A21\u6570\u636E\u8BAD\u7EC3\uFF0C\u80FD\u591F\u7406\u89E3\
+          \u590D\u6742\u7684\u8BED\u8A00\u6A21\u5F0F\u5E76\u751F\u6210\u9AD8\u8D28\
+          \u91CF\u7684\u6587\u672C\u5185\u5BB9\u3002"
+      display: DeepSeek-R1-Distill-Qwen-32B
+      icon:
+        src: https://public-resources.d.run/models/logos/deepseek-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.deepseek.com/
+      provider:
+        id: deepseek
+        name:
+          enUS: DeepSeek
+          zhCN: "\u6DF1\u5EA6\u6C42\u7D22"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+      modelscope:
+        name: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: deepseek-v3
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 8
+        gpuType: gpu
+        memory: 640
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: DeepSeek-V3 is a 671B parameter Mixture-of-Experts language model, activating
+          37B parameters per token, trained on 14.8 trillion tokens for advanced language
+          understanding.
+        zhCN: "DeepSeek-V3 \u662F\u4E00\u4E2A\u62E5\u6709 6710 \u4EBF\u53C2\u6570\u7684\
+          \u4E13\u5BB6\u6DF7\u5408\u8BED\u8A00\u6A21\u578B\uFF0C\u6BCF\u4E2A token\
+          \ \u6FC0\u6D3B 370 \u4EBF\u53C2\u6570\uFF0C\u5728 14.8 \u4E07\u4EBF\u4E2A\
+          \ token \u4E0A\u8BAD\u7EC3\uFF0C\u5177\u5907\u9AD8\u7EA7\u8BED\u8A00\u7406\
+          \u89E3\u80FD\u529B\u3002"
+      display: DeepSeek-V3-0324
+      icon:
+        src: https://public-resources.d.run/models/logos/deepseek-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.deepseek.com/
+      provider:
+        id: deepseek
+        name:
+          enUS: DeepSeek
+          zhCN: "\u6DF1\u5EA6\u6C42\u7D22"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: deepseek-ai/DeepSeek-V3
+      modelscope:
+        name: deepseek-ai/DeepSeek-V3
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: dzoo
+  spec:
+    config:
+      maxTokens: 32768
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 1
+        gpuType: gpu
+        memory: 64
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: DZoo is a LLM of DaoCloud focused on answering product questions about
+          DaoCloud.
+        zhCN: "DZoo \u662F DaoCloud \u7684\u5927\u6A21\u578B\uFF0C\u4E13\u6CE8\u4E8E\
+          \u89E3\u7B54\u5173\u4E8E DaoCloud \u7684\u4EA7\u54C1\u95EE\u9898\u3002"
+      display: DZoo
+      icon:
+        src: https://public-resources.d.run/models/logos/daocloud-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.daocloud.io/
+      provider:
+        id: daocloud
+        name:
+          enUS: DaoCloud
+          zhCN: DaoCloud
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: DaoCloud/DZoo-32B
+      modelscope:
+        name: DaoCloud/DZoo-32B
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: glm-4-9b-chat
+  spec:
+    config:
+      maxTokens: 128000
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 9B parameter chat model from the GLM-4 series, optimized for dialogue
+          generation and natural language understanding.
+        zhCN: "GLM-4 \u7CFB\u5217\u76849B\u53C2\u6570\u804A\u5929\u6A21\u578B\uFF0C\
+          \u4F18\u5316\u7528\u4E8E\u5BF9\u8BDD\u751F\u6210\u548C\u81EA\u7136\u8BED\
+          \u8A00\u7406\u89E3\u3002"
+      display: glm-4-9b-chat
+      icon:
+        src: https://public-resources.d.run/models/logos/glm-model-logo.png
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.zhipu.ai
+      provider:
+        id: zhipuai
+        name:
+          enUS: ZhipuAI
+          zhCN: "\u667A\u8C31AI"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: THUDM/glm-4-9b-chat
+      modelscope:
+        name: ZhipuAI/glm-4-9b-chat
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: hidream-i1-dev
+  spec:
+    deployments:
+    - customRuntimeArgs:
+      - --steps-scale=2.8
+      - --logging-level=DEBUG
+      - --disbale-duplicate-scheduler=True
+      - --custom-load-pipe-script
+      - "import torch\nfrom transformers import PreTrainedTokenizerFast, LlamaForCausalLM,\
+        \ AutoModel\nfrom diffusers import (\n    UniPCMultistepScheduler,\n    HiDreamImagePipeline,\n\
+        \    HiDreamImageTransformer2DModel,\n)\n\nscheduler = UniPCMultistepScheduler(\n\
+        \    flow_shift=3.0,\n    prediction_type=\"flow_prediction\",\n    use_flow_sigmas=True,\n\
+        )\n\ntokenizer_4 = PreTrainedTokenizerFast.from_pretrained(\n    args.model,\n\
+        \    subfolder='llama-3.1-8b-hf',\n)\n\ntext_encoder_4 = AutoModel.from_pretrained(\n\
+        \    args.model,\n    subfolder='llama-3.1-8b-hf',\n    output_hidden_states=True,\n\
+        \    output_attentions=True,\n    torch_dtype=torch.bfloat16,\n).to(args.device)\n\
+        \ntransformer = HiDreamImageTransformer2DModel.from_pretrained(\n    args.model,\
+        \ subfolder=\"transformer\", torch_dtype=torch.bfloat16\n).to(args.device)\n\
+        \npipe = HiDreamImagePipeline.from_pretrained(\n    args.model,\n    scheduler=scheduler,\n\
+        \    tokenizer_4=tokenizer_4,\n    text_encoder_4=text_encoder_4,\n    transformer=transformer,\n\
+        \    torch_dtype=torch.bfloat16,\n).to(args.device)"
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 64
+        perGPUMemoryGB: 80
+      runtime: image-gen
+      versionRequired: '>=v0.0.6'
+    descriptor:
+      description:
+        enUS: HiDream-I1-Dev is a new open-source image generative foundation model
+          with 17B parameters that achieves state-of-the-art image generation quality
+          within seconds.
+        zhCN: "Hidream-I1-Dev \u662F\u4E00\u79CD\u65B0\u7684\u5F00\u6E90\u56FE\u50CF\
+          \u751F\u6210\u57FA\u7840\u6A21\u578B\uFF0C\u5177\u670917B\u53C2\u6570\uFF0C\
+          \u53EF\u5728\u51E0\u79D2\u949F\u5185\u5B9E\u73B0\u6700\u65B0\u7684\u56FE\
+          \u50CF\u751F\u6210\u8D28\u91CF\u3002"
+      display: Hidream-I1-Dev
+      icon:
+        src: https://public-resources.d.run/models/logos/hidream-logo.webp
+        type: image/webp
+      links:
+      - description: About
+        url: https://hidreamai.com/explore
+      provider:
+        id: hidream
+        name:
+          enUS: HiDream.ai
+          zhCN: HiDream.ai
+      tags:
+      - TEXT_TO_IMAGE
+    source:
+      huggingface:
+        name: HiDream-ai/HiDream-I1-Dev
+      modelscope:
+        name: AI-ModelScope/HiDream-I1-Dev
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: llama-3.2-11b-vision-instruct
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=4096
+      - --max-num-seqs=16
+      - --enforce-eager
+      - --enable-auto-tool-choice
+      - --tool-call-parser
+      - llama3_json
+      - --chat-template
+      - examples/tool_chat_template_llama3.2_json.jinja
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: An 11B parameter vision-instruct model from the Llama series, integrating
+          vision and language processing capabilities for multimodal tasks.
+        zhCN: "Llama \u7CFB\u5217\u7684 11B \u53C2\u6570\u89C6\u89C9\u6307\u4EE4\u6A21\
+          \u578B\uFF0C\u7ED3\u5408\u89C6\u89C9\u548C\u8BED\u8A00\u5904\u7406\u80FD\
+          \u529B\uFF0C\u9002\u7528\u4E8E\u591A\u6A21\u6001\u4EFB\u52A1\u3002"
+      display: Llama-3.2-11B-Vision-Instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/llama-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://ai.meta.com/llama/
+      provider:
+        id: meta
+        name:
+          enUS: Meta
+          zhCN: Meta
+      tags:
+      - TEXT_GENERATION
+      - IMAGE_TO_TEXT
+      - TOOLS
+    source:
+      huggingface:
+        name: meta-llama/Llama-3.2-11B-Vision-Instruct
+      modelscope:
+        name: LLM-Research/Llama-3.2-11B-Vision-Instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: minimax-text-01
+  spec:
+    config:
+      maxTokens: 40960000
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 8
+        gpuType: gpu
+        memory: 640
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.6.4'
+    descriptor:
+      description:
+        enUS: MiniMax-Text-01 is a powerful language model with 456 billion total
+          parameters, of which 45.9 billion are activated per token.
+        zhCN: "MiniMax-Text-01 \u662F\u4E00\u4E2A\u5F3A\u5927\u7684\u8BED\u8A00\u6A21\
+          \u578B\uFF0C\u5171\u6709 4560 \u4EBF\u4E2A\u53C2\u6570\uFF0C\u5176\u4E2D\
+          \u6BCF\u4E2A token \u6FC0\u6D3B 459 \u4EBF\u4E2A\u53C2\u6570\u3002"
+      display: MiniMax-Text-01
+      icon:
+        src: https://public-resources.d.run/models/logos/minimax-logo.webp
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.minimaxi.com/
+      provider:
+        id: minimax
+        name:
+          enUS: MiniMax
+          zhCN: "\u7A00\u5B87\u79D1\u6280"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: MiniMaxAI/MiniMax-Text-01
+      modelscope:
+        name: MiniMaxAI/MiniMax-Text-01
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: phi-3.5-mini-instruct
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=4096
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 25
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A mini instruction-tuned model from the Phi series, lightweight and
+          suitable for various natural language processing tasks.
+        zhCN: "Phi \u7CFB\u5217\u7684\u8FF7\u4F60\u6307\u4EE4\u6A21\u578B\uFF0C\u8F7B\
+          \u91CF\u7EA7\u8BBE\u8BA1\uFF0C\u9002\u7528\u4E8E\u591A\u79CD\u81EA\u7136\
+          \u8BED\u8A00\u5904\u7406\u4EFB\u52A1\u3002"
+      display: Phi-3.5-mini-instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/phi-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.microsoft.com/en-us/research/
+      provider:
+        id: microsoft
+        name:
+          enUS: Microsoft
+          zhCN: "\u5FAE\u8F6F"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: microsoft/phi-3.5-mini-instruct
+      modelscope:
+        name: LLM-Research/Phi-3.5-mini-instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: phi-4
+  spec:
+    config:
+      maxTokens: 16384
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=4096
+      resourceRequirements:
+        cpu: 16
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: phi-4 is a state-of-the-art open model built upon a blend of synthetic
+          datasets, data from filtered public domain websites, and acquired academic
+          books and Q&A datasets.
+        zhCN: "phi-4\uFF0C\u53C2\u6570\u53EA\u6709140\u4EBF\u6027\u80FD\u5374\u6781\
+          \u5F3A\uFF0C\u5728GPQA\u7814\u7A76\u751F\u6C34\u5E73\u3001MATH\u6570\u5B66\
+          \u57FA\u51C6\u6D4B\u8BD5\u4E2D\uFF0C\u8D85\u8FC7\u4E86OpenAI\u7684GPT-4o\uFF0C\
+          \u4E5F\u8D85\u8FC7\u4E86\u540C\u7C7B\u9876\u7EA7\u5F00\u6E90\u6A21\u578B\
+          Qwen2.5-14B\u548CLlama-3.3-70B"
+      display: Phi-4
+      icon:
+        src: https://public-resources.d.run/models/logos/phi-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://www.microsoft.com/en-us/research/
+      provider:
+        id: microsoft
+        name:
+          enUS: Microsoft
+          zhCN: "\u5FAE\u8F6F"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: microsoft/phi-4
+      modelscope:
+        name: microsoft/phi-4
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen2-0.5b-instruct
+  spec:
+    config:
+      maxTokens: 4096
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 8
+        perGPUMemoryGB: 5
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 0.5B parameter instruction-tuned model from the Qwen2 series, suitable
+          for multilingual text generation and understanding.
+        zhCN: "Qwen2 \u7CFB\u5217\u7684 0.5B \u53C2\u6570\u6307\u4EE4\u5FAE\u8C03\u6A21\
+          \u578B\uFF0C\u9002\u7528\u4E8E\u591A\u8BED\u8A00\u6587\u672C\u751F\u6210\
+          \u548C\u7406\u89E3\u3002"
+      display: Qwen2-0.5B-Instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: Qwen/Qwen2-0.5B-Instruct
+      modelscope:
+        name: Qwen/Qwen2-0.5B-Instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen2.5-14b-instruct
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs:
+      - --enable-auto-tool-choice
+      - --tool-call-parser
+      - hermes
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 14B parameter instruction-tuned model from the Qwen2.5 series, excelling
+          in various tasks, especially coding and mathematics.
+        zhCN: "Qwen2.5 \u7CFB\u5217\u7684 14B \u53C2\u6570\u6307\u4EE4\u5FAE\u8C03\
+          \u6A21\u578B\uFF0C\u5728\u591A\u4EFB\u52A1\u4E2D\u8868\u73B0\u4F18\u5F02\
+          \uFF0C\u7279\u522B\u662F\u7F16\u7801\u548C\u6570\u5B66\u80FD\u529B\u3002"
+      display: Qwen2.5-14B-Instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+      - TOOLS
+    source:
+      huggingface:
+        name: Qwen/Qwen2.5-14B-Instruct
+      modelscope:
+        name: Qwen/Qwen2.5-14B-Instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen2.5-72b-instruct-awq
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 32
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 72B parameter instruction-tuned model from the Qwen2.5 series, utilizing
+          AWQ quantization for balanced performance and efficiency in complex tasks.
+        zhCN: "Qwen2.5 \u7CFB\u5217\u7684 72B \u53C2\u6570\u6307\u4EE4\u6A21\u578B\
+          \uFF0C\u91C7\u7528 AWQ \u91CF\u5316\uFF0C\u517C\u987E\u6027\u80FD\u548C\u6548\
+          \u7387\uFF0C\u9002\u7528\u4E8E\u590D\u6742\u4EFB\u52A1\u3002"
+      display: Qwen2.5-72B-Instruct-AWQ
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: Qwen/Qwen2.5-VL-72B-Instruct-AWQ
+      modelscope:
+        name: Qwen/Qwen2.5-VL-72B-Instruct-AWQ
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen2.5-7b-instruct
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 25
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 7B parameter instruction-tuned model from the Qwen2.5 series, supporting
+          multiple languages, excelling in long text generation and structured data
+          understanding.
+        zhCN: "Qwen2.5 \u7CFB\u5217\u76847B\u53C2\u6570\u6307\u4EE4\u5FAE\u8C03\u6A21\
+          \u578B\uFF0C\u652F\u6301\u591A\u8BED\u8A00\uFF0C\u64C5\u957F\u957F\u6587\
+          \u672C\u751F\u6210\u548C\u7ED3\u6784\u5316\u6570\u636E\u7406\u89E3\u3002"
+      display: Qwen2.5-7B-Instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: Qwen/Qwen2.5-VL-7B-Instruct
+      modelscope:
+        name: Qwen/Qwen2.5-VL-7B-Instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen2.5-coder-32b-instruct
+  spec:
+    config:
+      maxTokens: 32768
+    deployments:
+    - customRuntimeArgs:
+      - --enable-auto-tool-choice
+      - --tool-call-parser
+      - hermes
+      resourceRequirements:
+        cpu: 1
+        gpuCount: 2
+        gpuType: vgpu
+        memory: 16
+        perGPUMemoryGB: 50
+      runtime: vllm
+      versionRequired: '>=v0.6.5'
+    descriptor:
+      description:
+        enUS: A 32B parameter coder instruction-tuned model from the Qwen2.5 series,
+          optimized for code generation and understanding.
+        zhCN: "Qwen2.5 \u7CFB\u5217\u7684 32B \u53C2\u6570\u7F16\u7801\u6307\u4EE4\
+          \u6A21\u578B\uFF0C\u4E13\u4E3A\u4EE3\u7801\u751F\u6210\u548C\u7406\u89E3\
+          \u4F18\u5316\u3002"
+      display: Qwen2.5-Coder-32B-Instruct
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+      - TOOLS
+    source:
+      huggingface:
+        name: Qwen/Qwen2.5-Coder-32B-Instruct
+      modelscope:
+        name: Qwen/Qwen2.5-Coder-32B-Instruct
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwen3-235b-a22b-fp8
+  spec:
+    deployments:
+    - customRuntimeArgs: []
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 8
+        gpuType: gpu
+        memory: 640
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=0.8.5'
+    descriptor:
+      description:
+        enUS: Qwen3 is the latest generation of large language models in Qwen series,
+          offering a comprehensive suite of dense and mixture-of-experts (MoE) models.
+          Built upon extensive training, Qwen3 delivers groundbreaking advancements
+          in reasoning, instruction-following, agent capabilities, and multilingual
+          support.
+        zhCN: "Qwen3\u662F\u901A\u4E49\u7CFB\u5217\u6700\u65B0\u4E00\u4EE3\u5927\u8BED\
+          \u8A00\u6A21\u578B\uFF0C\u63D0\u4F9B\u4E86\u4E00\u6574\u5957\u7A20\u5BC6\
+          \u548C\u6DF7\u5408\u4E13\u5BB6\uFF08MoE\uFF09\u6A21\u578B\u3002\u57FA\u4E8E\
+          \u5927\u91CF\u8BAD\u7EC3\uFF0CQwen3\u5728\u63A8\u7406\u3001\u6307\u4EE4\u8DDF\
+          \u968F\u3001\u667A\u80FD\u4F53\u80FD\u529B\u548C\u591A\u8BED\u8A00\u652F\
+          \u6301\u65B9\u9762\u53D6\u5F97\u4E86\u7A81\u7834\u6027\u8FDB\u5C55\u3002"
+      display: Qwen3-235B-A22B-FP8
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+    source:
+      huggingface:
+        name: Qwen/Qwen3-235B-A22B-FP8
+      modelscope:
+        name: Qwen/Qwen3-235B-A22B-FP8
+- apiVersion: model.hydra.io/v1alpha1
+  kind: ModelSpec
+  metadata:
+    name: qwq-32b
+  spec:
+    config:
+      maxTokens: 131072
+    deployments:
+    - customRuntimeArgs:
+      - --max-model-len=32768
+      - --enforce-eager
+      - --enable_reasoning
+      - --reasoning_parser=deepseek_r1
+      - --gpu-memory-utilization=1
+      resourceRequirements:
+        cpu: 8
+        gpuCount: 1
+        gpuType: vgpu
+        memory: 64
+        perGPUMemoryGB: 80
+      runtime: vllm
+      versionRequired: '>=v0.7.1'
+    descriptor:
+      description:
+        enUS: "QwQ is Qwen\u2019s reasoning model, outperforming instruction-tuned\
+          \ models with superior performance on challenging tasks."
+        zhCN: "QwQ \u662F Qwen \u7CFB\u5217\u7684\u63A8\u7406\u6A21\u578B\uFF0C\u63A8\
+          \u7406\u80FD\u529B\u8D85\u8D8A\u4F20\u7EDF\u6307\u4EE4\u6A21\u578B\uFF0C\
+          \u5728\u590D\u6742\u4EFB\u52A1\u4E0A\u8868\u73B0\u7A81\u51FA\u3002"
+      display: QwQ-32B
+      icon:
+        src: https://public-resources.d.run/models/logos/qwen-model-logo.svg
+        type: image/svg
+      links:
+      - description: About
+        url: https://github.com/QwenLM
+      provider:
+        id: alibaba
+        name:
+          enUS: Alibaba
+          zhCN: "\u901A\u4E49\u5343\u95EE"
+      tags:
+      - TEXT_GENERATION
+      - TOOLS
+    source:
+      huggingface:
+        name: Qwen/QwQ-32B
+      modelscope:
+        name: Qwen/QwQ-32B
+generated: '2025-07-08T09:49:22Z'
